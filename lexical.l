@@ -1,9 +1,11 @@
 %{
     #include<stdio.h>
+    #include<stdlib.h>
+    #include<syn.tab.h>
+    #include<string.h>
     int nblignes  = 1;
 %}
 /*decalaration des regex */
-Type [CHAR|STRING|REAL|INTEGER]
 Idf [A-Z][a-zA-Z0-9]{0,9}
 Format [$|%|#|&]
 Text \"[A-Za-z0-9]*{Format}*\"
@@ -22,8 +24,8 @@ nomProgramme [a-zA-Z][a-zA-Z0-9]*
 "LOOP" {return loop; printf("loop");}
 "ARRAY" {return array;printf("array");}
 "Programme" {return Programme;}
-"READ" {return entré;}
-"WRITE" {return sortie;}
+"READ" {return READ;}
+"WRITE" {return WRITE;}
 "@" {return adresse;}
 "EXECUT" {return execute;}
 "VAR" {return var;}
@@ -63,3 +65,10 @@ nomProgramme [a-zA-Z][a-zA-Z0-9]*
 \n {nblignes++; return new_line;}
 [ \t]
 . {printf("erreur dans la ligne %d a l'entite %s",nblignes,yytext); return err;}
+%%
+int main()
+{
+    yyin = fopen("programme.txt","r");
+    if(yyin==NULL) printf("ERROR\n");
+    else yylex();
+}
