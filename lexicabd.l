@@ -39,6 +39,8 @@ Comment "/*"(.|\n)*"*/"
 "IF" {return if;}
 "ELSE" {return else;}
 "END_IF" {return endif;}
+"READ" {return read;}
+"WRITE" {return write;}
 "+" {return add;}
 "*" {return multp;}
 "-" {return minus;}"/"{return div;}
