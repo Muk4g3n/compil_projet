@@ -1,74 +1,51 @@
+
 %{
     #include<stdio.h>
-    #include<stdlib.h>
-    #include<syn.tab.h>
-    #include<string.h>
-    int nblignes  = 1;
+    #include "bison.tab.h"
+    int nbr_lg=1;
 %}
-/*decalaration des regex */
-Idf [A-Z][a-zA-Z0-9]{0,9}
-Format [$|%|#|&]
-Text \"[A-Za-z0-9]*{Format}*\"
-Art [\+|\*|-|/]
-Number ([1-9][0-9]*)|0
-Taille \[{Number}\]
-Int -?{Number}
-Float {Number}\.[0-9]*[1-9]|-\({Number}\.[0-9]*[1-9]\)
-Char \'.\'
-String \'.*\'
-Commentaire \/\*[^(\/\*|\*\/)]\*\/
-nomProgramme [a-zA-Z][a-zA-Z0-9]* 
+
+lettreM [A-Z]
+lettre [a-zA-Z]
+chiffre [0-9]
+IDF {lettreM}({lettre}|{chiffre})*
+cst{chiffre}+
+Comment "/*"(.|\n)*"*/"
+  
+
 %%
-"##" {return import;}
-"PROCESS" {return process; printf("process");}
-"LOOP" {return loop; printf("loop");}
-"ARRAY" {return array;printf("array");}
-"Programme" {return Programme;}
-"READ" {return READ;}
-"WRITE" {return WRITE;}
-"@" {return adresse;}
-"EXECUT" {return execute;}
-"VAR" {return var;}
-"IF" {return if;}
-"ELSE" {return else;}
-"END_IF" {return end_if;}
-"WHILE" {return while;}
-"CONST" {return CONST;}
-"INTEGER" {return INTEGER;}
-"STRING" {return STRING;}
-"CHAR" {return CHAR;}
-"REAL" {return REAL;}
-"SUP" {return superieur;}
-"INF" {return INF;}
-"INFE" {return INFE;}
-"EG" {return EG;}
-"SUPE" {return SUPE;}
-"DIFF" {return DIFF;}
-"(" {return pg;}
-")" {return pd;}
-"{" {return ag;}
-"}" {return ad;}
-"//" {return varsep;}
-":=" {return affectation;}
-"$" {return fins; printf("fin instruction");}
-"|" {return bar;}
-{Float} {return float;}
-{Int} {return Int;}
-{Char} {return Char;}
-{String} {return String;}
-{Text} {return text;}
-{Art} {return arithmethique;}
-{Taille} {return taille;}
-{Format} {return format;}
-{Commentaire} {return commentaire;}
-{nomProgramme} {return nomProgramme;}
-\n {nblignes++; return new_line;}
-[ \t]
-. {printf("erreur dans la ligne %d a l'entite %s",nblignes,yytext); return err;}
+Programme   return mc_pgm; 
+INTEGER     return mc_entier;
+REAL        return mc_reel;
+STRING      return mc_str;
+PROCESS     return mc_process;
+LOOP        return mc_loop;
+ARRAY       return mc_array;
+VAR         return mc_var;
+CONST       return mc_const;
+{IDF}       {
+                printf("idf : %s\n",yytext);
+                return IDF;
+            }
+{cst}       return cst;
+
+{Comment}   printf("commentaire : %s \n",yytext);
+
+"##"        return dz; 
+"/"         return division ;
+"+"         return addition ;
+"*"         return  multi;
+"::"        return dpts ;
+"="         return  egale;
+":="        return affectation  ;
+"$"         return fin;
+"{"         return acco ;
+"}"         return  accf;
+"["         return crov;
+"]"         return  crof; 
+"//"        return sep;
+[ \t] 
+\n          {nbr_lg++; printf("%d)   ",nbr_lg);}  
+.           {printf("erreur lexical : %d dans %s ",nbr_lg,yytext);}
 %%
-int main()
-{
-    yyin = fopen("programme.txt","r");
-    if(yyin==NULL) printf("ERROR\n");
-    else yylex();
-}
+
