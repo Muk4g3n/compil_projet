@@ -11,6 +11,7 @@ chiffre [0-9]
 IDF {lettreM}({lettre}|{chiffre})*
 cst{chiffre}+
 Comment "/*"(.|\n)*"*/"
+texte ({lettre}|" ")*
   
 
 %%
@@ -22,14 +23,31 @@ PROCESS     return mc_process;
 LOOP        return mc_loop;
 ARRAY       return mc_array;
 VAR         return mc_var;
+INSTRUCTION return mc_instruction;
 CONST       return mc_const;
+
+READ        return mc_read;
+WRITE       return mc_write;
+WHILE       return mc_while;
+EXECUT      return mc_execut;
+IF          return mc_if;
+END_IF      return mc_end_if;
+ELSE        return mc_else;
+
+"|"         return bar;
+
 {IDF}       {
-                printf("idf : %s\n",yytext);
+                printf("idf : %s ",yytext);
                 return IDF;
             }
 {cst}       return cst;
 
-{Comment}   printf("commentaire : %s \n",yytext);
+{Comment}   { printf("commentaire : %s \n",yytext);}
+
+"("         return paro;
+")"         return parf;
+@         return address;
+
 
 "##"        return dz; 
 "/"         return division ;
@@ -45,7 +63,7 @@ CONST       return mc_const;
 "]"         return  crof; 
 "//"        return sep;
 [ \t] 
-\n          {nbr_lg++; printf("%d)   ",nbr_lg);}  
-.           {printf("erreur lexical : %d dans %s ",nbr_lg,yytext);}
+\n          {nbr_lg++; printf("\n%d)   ",nbr_lg);}  
+.           {printf("erreur lexical : %d dans %s \n",nbr_lg,yytext);}
 %%
 
