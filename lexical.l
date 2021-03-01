@@ -86,6 +86,6 @@ INF         return mc_inf;
 
 [ \t] 
 \n          {nbr_lg++; printf("\n%d)   ",nbr_lg);}  
-.           {printf("erreur lexical : %d dans %s \n",nbr_lg,yytext);}
+.           {printf("erreur lexical : %d \n",nbr_lg);}
 %%
 

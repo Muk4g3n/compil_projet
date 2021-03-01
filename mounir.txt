@@ -1,0 +1,18 @@
+## PROCESS $  ## PROCESS $  ## ARRAY $
+## ARRAY $
+Programme Acad
+{
+   VAR  INTEGER :: Xe$
+   CONST  
+   INTEGER :: Xd:=5// Ac:=15$
+   INTEGER :: Xy:=5// Ac:=15$
+   
+   
+   Xe:= Xe / 0$
+   
+   
+   
+   Xe:=5$
+    Xe:=Ge$
+}
+
