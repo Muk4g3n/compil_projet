@@ -8,6 +8,7 @@ extern FILE* yyin ;
 int yylex();
 int yyerror();
 int yyparse();
+int nbligne,Col
 %}
 %union{
         int entier;
@@ -105,18 +106,11 @@ DEC_COND:DEC_COND2 OPERATEUR_COMPARAISON DEC_COND2
         |
         ;
 DEC_COND2:typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2 {
-                                                        if($2 == '/'){
-                                                                if($3 ==0) printf("erreur semantique : division par 0");
-                                                                else{
-                                                                        printf("la Division de %s par %d \n ", $1,$3);
-                                                                }
+                                                        if($2 == '/') if($3 ==0) printf("erreur semantique : division par 0 %d",nbligne);
+                                                                else printf("la Division de %s par %d \n ", $1,$3);
                                                         }
-                                                        }
-         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2       if($2 == '/'){
-                                                                if($3 ==0) printf("erreur semantique : division par 0");
-                                                                else{
-                                                                        printf("la Division de %s par %d \n ", $1,$3);
-                                                                }
+         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2       if($2 == '/') if($3 ==0) printf("erreur semantique : division par 0");
+                                                                        else printf("la Division de %s par %d \n ", $1,$3);
                                                         }
                                                         }
          | typeInt
@@ -167,6 +161,7 @@ int yyerror(void){ return 0;
 }
 
 int main(int argc, char* argv[]){
+        initialisation();
     int fd;
     if(argc==1){
             printf("erreur! entrer un fichier text\n");
