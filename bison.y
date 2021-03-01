@@ -9,12 +9,17 @@ int yylex();
 int yyerror();
 int yyparse();
 %}
-%token mc_pgm mc_entier mc_reel mc_str mc_process mc_loop mc_array mc_const mc_var IDF
-%token  dz division addition multi dpts egale affectation fin acco 
+%union{
+        int entier;
+        char* str;
+        float flt;
+}
+%token mc_pgm mc_entier mc_reel mc_str mc_process mc_loop mc_array mc_const mc_var <str>IDF
+%token  dz division addition multi dpts egale affectation <entier>cst fin acco 
 %token accf crov crof sep mc_instruction
 %token mc_read paro parf mc_write bar address
 %token mc_while mc_execut mc_if mc_else mc_end_if
-%token typeInt typeFloat typeString typeChar
+%token <entier>typeInt <flt>typeFloat <str>typeString <str>typeChar
 %token mc_sup mc_supe mc_eg mc_dif mc_infe mc_inf
 %token quotation_mark
 %token signe_real signe_string signe_char moins
@@ -60,8 +65,8 @@ LIST_IDF: IDF sep LIST_IDF
 LIST_CST:TYPE dpts LIST_IDF_CST LIST_CST
         |
         ;   
-LIST_IDF_CST: IDF affectation TYPE_IDF sep LIST_IDF_CST
-            | IDF affectation TYPE_IDF fin
+LIST_IDF_CST: IDF affectation cst TYPE_IDF sep LIST_IDF_CST 
+            | IDF affectation cst TYPE_IDF fin
             ;
 
 
@@ -100,8 +105,21 @@ DEC_AFFECTATION2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2
 DEC_COND:DEC_COND2 OPERATEUR_COMPARAISON DEC_COND2
         |
         ;
-DEC_COND2:typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2
-         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2
+DEC_COND2:typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2 {
+                                                        if($2 == '/'){
+                                                                if($3 ==0) printf("erreur semantique : division par 0");
+                                                                else{
+                                                                        printf("la Division de %s par %d \n ", $1,$3);
+                                                                }
+                                                        }
+                                                        }
+         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2       if($2 == '/'){
+                                                                if($3 ==0) printf("erreur semantique : division par 0");
+                                                                else{
+                                                                        printf("la Division de %s par %d \n ", $1,$3);
+                                                                }
+                                                        }
+                                                        }
          | typeInt
          |IDF
          ;
@@ -121,7 +139,11 @@ TYPE: mc_entier
 IDF_TABLEAU:IDF crov typeInt crof ;
 
 
-TYPE_IDF:typeInt 
+TYPE_IDF:typeInt {if($1 <-32768 && $1>32767)
+                        {
+                                printf("erreur semantique : la valeur est non-valide\n ");
+                        }
+                        }
         |typeFloat 
         |typeString 
         |typeChar
