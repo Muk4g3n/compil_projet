@@ -94,7 +94,7 @@ INF         {rechercher(yytext,"Mot cle"," ",0,1); printf("entite lexical reconn
 
 [ \t] 
 \n          {nbr_lg++; printf("\n%d)   ",nbr_lg);}  
-.           {printf("erreur lexical : %d dans %s \n",nbr_lg,yytext);}
+.           {printf("erreur lexical : %d \n",nbr_lg);}
 %%
 
 int main(){

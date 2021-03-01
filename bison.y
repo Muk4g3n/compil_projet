@@ -71,15 +71,14 @@ LIST_IDF_CST: IDF affectation cst TYPE_IDF sep LIST_IDF_CST
 
 
 
-DEC_INST:mc_instruction DEC_INST2
-        
+DEC_INST: DEC_INST2 DEC_INST
+        |DEC_INST2
         ;
-DEC_INST2:DEC_READ DEC_INST2
-         |DEC_WRITE DEC_INST2
-         |DEC_WHILE DEC_INST2
-         |DEC_AFFECTATION DEC_INST2
-         |DEC_EXECUT DEC_INST2
-         |
+DEC_INST2:DEC_READ 
+         |DEC_WRITE 
+         |DEC_WHILE 
+         |DEC_AFFECTATION 
+         |DEC_EXECUT 
          ;
 
 DEC_READ:mc_read paro typeString  bar address IDF parf fin
