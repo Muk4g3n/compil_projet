@@ -8,22 +8,27 @@ extern FILE* yyin ;
 int yylex();
 int yyerror();
 int yyparse();
-int nbligne,Col
+int nbligne,Col;
+char* sauvtype;
 %}
 %union{
         int entier;
         char* str;
         float flt;
 }
-%token mc_pgm mc_entier mc_reel mc_str mc_process mc_loop mc_array mc_const mc_var <str>IDF
-%token  dz division addition multi dpts egale affectation <entier>cst fin acco 
+%token mc_pgm mc_entier mc_reel mc_str mc_process mc_loop mc_array mc_const mc_var IDF
+%token  dz division addition multi dpts egale affectation cst fin acco 
 %token accf crov crof sep mc_instruction
 %token mc_read paro parf mc_write bar address
 %token mc_while mc_execut mc_if mc_else mc_end_if
-%token <entier>typeInt <flt>typeFloat <str>typeString <str>typeChar
+%token typeInt typeFloat typeString typeChar
 %token mc_sup mc_supe mc_eg mc_dif mc_infe mc_inf
 %token quotation_mark
 %token signe_real signe_string signe_char moins
+
+%type <str> IDF typeChar typeString
+%type <entier> typeInt cst
+%type <flt> typeFloat 
 
 %start S
 %%
@@ -102,20 +107,14 @@ DEC_AFFECTATION2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2
                 | TYPE_IDF
                 | IDF
                 ;
-DEC_COND:DEC_COND2 OPERATEUR_COMPARAISON DEC_COND2
-        |
-        ;
-DEC_COND2:typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2 {
-                                                        if($2 == '/') if($3 ==0) printf("erreur semantique : division par 0 %d",nbligne);
-                                                                else printf("la Division de %s par %d \n ", $1,$3);
-                                                        }
-         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2       if($2 == '/') if($3 ==0) printf("erreur semantique : division par 0");
-                                                                        else printf("la Division de %s par %d \n ", $1,$3);
-                                                        }
-                                                        }
+DEC_COND2: typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2
+         | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2   
          | typeInt
          |IDF
          ;
+DEC_COND:DEC_COND2 OPERATEUR_COMPARAISON DEC_COND2
+        |
+        ;
 
 DEC_EXECUT:mc_execut DEC_AFFECTATION mc_if paro DEC_COND parf DEC_EXECUT_ELSE  mc_end_if
           ;
@@ -125,14 +124,16 @@ DEC_EXECUT_ELSE: mc_else mc_execut DEC_AFFECTATION
                 ;
 
 
-TYPE: mc_entier
-    | mc_reel
-    | mc_str
+TYPE: mc_entier 
+    | mc_reel   
+    | mc_str    
     ;
-IDF_TABLEAU:IDF crov typeInt crof ;
+IDF_TABLEAU:IDF crov typeInt crof  {
+        if($3 <0) printf("erreur semantique :taille de tableau non valide %d:%d",nbligne,Col);
+}
+;
 
-
-TYPE_IDF:typeInt {if($1 <-32768 && $1>32767)
+TYPE_IDF: typeInt {if($1 <-32768 && $1>32767)
                         {
                                 printf("erreur semantique : la valeur est non-valide\n ");
                         }

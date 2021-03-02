@@ -28,7 +28,7 @@ void initiliasiation()
     for (i = 0; i < 1000; i++)
         tab[i].state = 0;
 
-    for (i = 0; i40; i++)
+    for (i = 0; i < 40; i++)
     {
         tabs[i].state = 0;
         tabm[i].state = 0;
@@ -62,7 +62,7 @@ void inserer(char entite[], char code[], char type[], float val, int i, int y)
     }
 }
 
-void rechercher(char entite[], char type[], float val, int y)
+void rechercher(char entite[], char code[], char type[], float val, int y)
 {
     int i, j;
     switch (y)
@@ -77,7 +77,7 @@ void rechercher(char entite[], char type[], float val, int y)
             ;
         if (i < 1000)
         {
-            inserer(entite, type, val, i, 0);
+            inserer(entite, code, type, val, i, 0);
         }
         else
         {
@@ -95,7 +95,7 @@ void rechercher(char entite[], char type[], float val, int y)
             ;
         if (i < 40)
         {
-            inserer(entite, type, val, i, 1);
+            inserer(entite, code, type, val, i, 1);
         }
         else
         {
@@ -112,7 +112,7 @@ void rechercher(char entite[], char type[], float val, int y)
             ;
         if (i < 40)
         {
-            inserer(entite, type, val, i, 2);
+            inserer(entite, code, type, val, i, 2);
         }
         else
         {
