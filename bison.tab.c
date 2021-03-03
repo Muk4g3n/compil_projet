@@ -507,14 +507,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    34,    34,    37,    38,    41,    44,    45,    46,    49,
-      50,    53,    54,    55,    56,    57,    60,    61,    64,    65,
-      66,    67,    70,    71,    73,    74,    79,    80,    82,    83,
-      84,    85,    86,    89,    92,    95,    96,    99,   101,   102,
-     104,   105,   106,   107,   109,   110,   111,   112,   114,   115,
-     118,   121,   122,   126,   127,   128,   130,   135,   140,   141,
-     142,   146,   147,   148,   149,   152,   153,   154,   155,   156,
-     157
+       0,    35,    35,    38,    39,    42,    45,    46,    47,    50,
+      51,    54,    55,    56,    57,    58,    61,    62,    65,    66,
+      67,    68,    71,    72,    74,    75,    80,    81,    83,    84,
+      85,    86,    87,    90,    93,    96,    97,   100,   102,   103,
+     105,   106,   107,   108,   110,   111,   112,   113,   115,   116,
+     119,   122,   123,   127,   128,   129,   131,   136,   141,   142,
+     143,   147,   148,   149,   150,   153,   154,   155,   156,   157,
+     158
 };
 #endif
 
@@ -1509,14 +1509,14 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 34 "bison.y"
+#line 35 "bison.y"
     {printf("la chaine est correct\n");YYACCEPT;;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 130 "bison.y"
+#line 131 "bison.y"
     {
         if((yyvsp[(3) - (4)].entier) <0) printf("erreur semantique :taille de tableau non valide %d:%d",nbligne,Col);
 ;}
@@ -1525,7 +1525,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 135 "bison.y"
+#line 136 "bison.y"
     {if((yyvsp[(1) - (1)].entier) <-32768 && (yyvsp[(1) - (1)].entier)>32767)
                         {
                                 printf("erreur semantique : la valeur est non-valide\n ");
@@ -1748,36 +1748,18 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 159 "bison.y"
+#line 160 "bison.y"
 
 int yyerror(void){ return 0;
 }
 
-int main(int argc, char* argv[]){
+void main(){
         initialisation();
-    int fd;
-    if(argc==1){
-            printf("erreur! entrer un fichier text\n");
-            return -1;
-    }
-    yyin=fopen(argv[1],"r");
-    fd =open(argv[1],O_RDONLY);
-    if(fd == -1){
-            printf("le fichier .txt n'existe pas \n");
-            return -1;
-    }
-    //si le fichier existe 
-    yyparse();
-    return 0;
+        yyparse();
+        afficher();
 }
 int yywrap(void){
-        /*
-        SIGNE_FORMATAGE:signe_real 
-                |signe_string 
-                |signe_char
-                |fin
-                ;    
-        */
+        
         return 0;}
 
 

@@ -147,3 +147,29 @@ void afficher()
             printf("\t |%10s|%12s\n", tabs[i].name, tabs[i].type);
         }
 }
+//retourne 1 si idf est doublement declaré, 0 sinon
+int double_declaration(char entite[])
+{
+    int i = 0;
+    while (i < 1000 && strcmp(entite, tab[i].name) == -1)
+        ;
+    if (i < 1000)
+    {
+        if (strcmp(tab[i].type, " "))
+            return 0;
+        else
+            return 1;
+    }
+    else
+        return 1;
+}
+void inserer_type(char entite[], char type[])
+{
+    int i = 0;
+    while (i < 1000 && strcmp(entite, tab[i].name) == -1)
+        ;
+    if (i < 1000)
+    {
+        strcpy(tab[i].type, type);
+    }
+}

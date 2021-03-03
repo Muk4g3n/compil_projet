@@ -62,7 +62,10 @@ LIST_DEC:TYPE dpts LIST_IDF  LIST_DEC
         |
         ;
 
-LIST_IDF: IDF sep LIST_IDF
+LIST_IDF: IDF sep LIST_IDF {
+                                if(double_declaration($1)==0) inserer_type($1,sauvtype);
+                                else printf("erreur syntaxique: double declaration %d:%d\n",nbligne,Col)
+                                }
         | IDF_TABLEAU LIST_IDF 
         | IDF fin
         | IDF_TABLEAU fin
@@ -133,11 +136,7 @@ IDF_TABLEAU:IDF crov typeInt crof  {
 }
 ;
 
-TYPE_IDF: typeInt {if($1 <-32768 && $1>32767)
-                        {
-                                printf("erreur semantique : la valeur est non-valide\n ");
-                        }
-                        }
+TYPE_IDF: typeInt
         |typeFloat 
         |typeString 
         |typeChar
@@ -161,31 +160,13 @@ OPERATEUR_COMPARAISON:mc_sup
 int yyerror(void){ return 0;
 }
 
-int main(int argc, char* argv[]){
+void main(){
         initialisation();
-    int fd;
-    if(argc==1){
-            printf("erreur! entrer un fichier text\n");
-            return -1;
-    }
-    yyin=fopen(argv[1],"r");
-    fd =open(argv[1],O_RDONLY);
-    if(fd == -1){
-            printf("le fichier .txt n'existe pas \n");
-            return -1;
-    }
-    //si le fichier existe 
-    yyparse();
-    return 0;
+        yyparse();
+        afficher();
 }
 int yywrap(void){
-        /*
-        SIGNE_FORMATAGE:signe_real 
-                |signe_string 
-                |signe_char
-                |fin
-                ;    
-        */
+        
         return 0;}
 
 
