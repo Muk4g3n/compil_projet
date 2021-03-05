@@ -1,17 +1,16 @@
-## PROCESS $
 ## LOOP $
+## ARRAY $
 Programme Namee
 {     	
 
 	/* RAMDANI Abderrahmane KESSIR Ouassim groupe 1 */	
-	VAR REAL :: Axe2//Hello$
-		INTEGER ::AEz3 // Ze[2]$
+	VAR REAL :: Axe2// Hello //Hey$
+		INTEGER ::AEz3 // Ze[5]$
 		
 	CONST   
-	REAL :: Res:='a'//ASs:=(-22.2)$
+	REAL :: Res:='a'// ASs:=(-22.2)$
 	STRING :: Ae:="hello"$
-	REAL :: Res:='a'//ASs:=2.2$
-	REAL :: Res:='a'//ASs:=2.2$
+	INTEGER :: Xf:=5$
 	
 	
 		

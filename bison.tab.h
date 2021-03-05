@@ -43,20 +43,20 @@
      mc_entier = 259,
      mc_reel = 260,
      mc_str = 261,
-     mc_process = 262,
-     mc_loop = 263,
-     mc_array = 264,
-     mc_const = 265,
-     mc_var = 266,
-     IDF = 267,
-     dz = 268,
-     division = 269,
-     addition = 270,
-     multi = 271,
-     dpts = 272,
-     egale = 273,
-     affectation = 274,
-     cst = 275,
+     mc_char = 262,
+     mc_process = 263,
+     mc_loop = 264,
+     mc_array = 265,
+     mc_const = 266,
+     mc_var = 267,
+     IDF = 268,
+     dz = 269,
+     division = 270,
+     addition = 271,
+     multi = 272,
+     dpts = 273,
+     egale = 274,
+     affectation = 275,
      fin = 276,
      acco = 277,
      accf = 278,
@@ -100,7 +100,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 14 "bison.y"
+#line 13 "bison.y"
 
         int entier;
         char* str;
