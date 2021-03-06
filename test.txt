@@ -19,7 +19,7 @@ Programme Namee
 	
 	Ress :=(-2.2)+Aze*3$
 	Ze[7] :=Zz  + 2.2$
-	Axe2:= 5/0$
+	AEz3:= 5/0$
 	
 	WRITE("ff")$
 	
@@ -29,7 +29,7 @@ Programme Namee
 	
 	
 	
-	WHILE(Azz+Zee+1 SUP 2)
+	WHILE(Axe2+AEz3+1 SUP 2)
 	{
 		Iddd:=Iddd/0$
 	}

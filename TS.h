@@ -23,6 +23,8 @@ element tab[1000];
 elt tabs[40], tabm[40];
 extern char sav[20];
 
+char *operands_tab[10];
+
 //initialisation
 void initialisation()
 {
@@ -67,7 +69,16 @@ void inserer(char entite[], char code[], char type[], float val, int i, int y)
     }
 }
 
-void rechercher(char entite[], char code[], char type[], float val, int y)
+void inserer_char(char entite[], char code[], char type[], char val[], int i)
+{
+    tab[i].state = 1;
+    strcpy(tab[i].name, entite);
+    strcpy(tab[i].code, code);
+    strcpy(tab[i].type, type);
+    tab[i].charVal = strdup(val);
+}
+
+void rechercher(char entite[], char code[], char type[], char val[], int y)
 {
     int i, j;
     switch (y)
@@ -82,7 +93,8 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
             ;
         if (i < 1000 && (tab[i].state == 0))
         {
-            inserer(entite, code, type, val, i, 0);
+
+            inserer(entite, code, type, atof(val), i, 0);
         }
         break;
 
@@ -96,7 +108,7 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
             ;
         if (i < 40)
         {
-            inserer(entite, code, type, val, i, 1);
+            inserer(entite, code, type, atof(val), i, 1);
         }
         break;
     case 2:
@@ -109,11 +121,24 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
             ;
         if (i < 40)
         {
-            inserer(entite, code, type, val, i, 2);
+            inserer(entite, code, type, atof(val), i, 2);
         }
         break;
     }
 }
+
+void rechercher_string(char entite[], char code[], char type[], char val[])
+{
+    int i;
+
+    for (i = 0; ((i < 1000) && (tab[i].state == 1)) && (strcmp(entite, tab[i].name) != 0); i++)
+        ;
+    if ((i < 1000) && (tab[i].state == 0))
+    {
+        inserer_char(entite, code, type, val, i);
+    }
+}
+
 //retourne 1 si la bib existe 0 sinon
 int rechercher_BIB(char *bib)
 {
@@ -137,7 +162,7 @@ void afficher()
 
     printf("\n/***************Table des symboles IDF******************/\n");
     printf("____________________________________________________________________\n");
-    printf("\t| Nom_Entite |  Code_Entite | Type_Entite | Val_Entite | Taille_entite\n");
+    printf("\t| Nom_Entite |  Code_Entite | Type_Entite | Val_Entite | Taille_entite | character_val_entite\n");
     printf("____________________________________________________________________\n");
 
     for (i = 0; i < 1000; i++)
@@ -146,7 +171,7 @@ void afficher()
         if (tab[i].state == 1)
         {
 
-            printf("\t|%10s |%15s | %12s | %12f |%d\n", tab[i].name, tab[i].code, tab[i].type, tab[i].val, tab[i].taille);
+            printf("\t|%10s |%15s | %12s | %12f |      %d      | %s\n", tab[i].name, tab[i].code, tab[i].type, tab[i].val, tab[i].taille, tab[i].charVal);
         }
     }
 
@@ -239,6 +264,15 @@ int get_taille(char entite[])
         return tab[pos].taille;
 }
 
+char *get_type(char entite[])
+{
+    int pos = get_position(entite);
+    if (pos != -1)
+    {
+        return tab[pos].type;
+    }
+}
+
 int compare_type(char entite1[], char type[])
 {
     int pos1 = get_position(entite1);
@@ -252,4 +286,45 @@ int compare_type(char entite1[], char type[])
         printf("got inside the else \n");
         return 0;
     }
+}
+
+int compare_type1(char type1[], char type2[])
+{
+    if (type1 == type2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void inserer_tab_operand(char type[])
+{
+    int i = 0;
+    while (i < 10 && operands_tab[i] != NULL)
+    {
+        i++;
+    }
+    if (i < 10)
+    {
+        operands_tab[i] = type;
+        printf("type is %s \n", operands_tab[i]);
+    }
+}
+
+int compare_type_tab()
+{
+    int i = 1;
+    while (i < 10)
+    {
+        if (compare_type1(operands_tab[i - 1], operands_tab[i]) == 0)
+        {
+
+            return 0;
+        }
+        i++;
+    }
+    return 1;
 }

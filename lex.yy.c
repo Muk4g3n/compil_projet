@@ -713,52 +713,52 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 28 "lexical.l"
-{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1);  Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_entier;}
+{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1);  Col= Col + strlen(yytext);   return mc_entier;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 29 "lexical.l"
-{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_reel;}
+{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_reel;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 30 "lexical.l"
-{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_str;}
+{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_str;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 31 "lexical.l"
-{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_char;}
+{yylval.str = strdup(yytext);   rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_char;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 32 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_process;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_process;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 33 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_loop;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_loop;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 34 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_array;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_array;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 35 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_var;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_var;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 36 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_instruction;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_instruction;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 37 "lexical.l"
-{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return mc_const;}
+{rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext);   return mc_const;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
@@ -826,8 +826,8 @@ YY_RULE_SETUP
                 
             }
             yylval.entier = atoi(yytext);
-            rechercher(yytext,"const entier","INTEGER",0,0);
-            printf("entite lexical reconnu est %s\n",yytext);
+            rechercher(yytext,"const entier","INTEGER",yytext,0);
+             
             return typeInt;}
 	YY_BREAK
 case 24:
@@ -841,20 +841,20 @@ YY_RULE_SETUP
                 
             }
             yylval.flt = atof(yytext); 
-            rechercher(yytext,"const reel","REAL",0,0);
-            printf("entite lexical reconnu est %s\n",yytext);
+            rechercher(yytext,"const reel","REAL",yytext,0);
+             
             return typeFloat;
             }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 74 "lexical.l"
-{ yylval.str = strdup(yytext); Col= Col + strlen(yytext); rechercher(yytext,"const str","STRING",0,0); printf("entite lexical reconnu est %s\n",yytext); return typeString;}
+{ yylval.str = strdup(yytext); Col= Col + strlen(yytext); rechercher_string(yytext,"const str","STRING",yytext);   return typeString;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 75 "lexical.l"
-{ yylval.str = strdup(yytext); rechercher(yytext," const str","CHAR",0,0); Col= Col + strlen(yytext); printf("entite lexical reconnu est %s\n",yytext); return typeChar;}
+{ yylval.str = strdup(yytext); rechercher_string(yytext," const str","CHAR",yytext); Col= Col + strlen(yytext);   return typeChar;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
@@ -899,8 +899,8 @@ YY_RULE_SETUP
                 if(yyleng >10) printf("Erreur lexicale: IDF trop long  ligne : %d Col :%d \n",nbligne,Col);
                 else{
                     yylval.str = strdup(yytext);
-                    rechercher(yytext,"IDF","nothing",5,0);
-                    printf("entite lexical reconnu est %s\n",yytext);
+                    rechercher(yytext,"IDF","nothing",0,0);
+                     
                     Col= Col + strlen(yytext);
                     return IDF;
                 }
@@ -939,17 +939,17 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 108 "lexical.l"
-{rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return addition ;}
+{ yylval.str = strdup(yytext); rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return addition ;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 109 "lexical.l"
-{rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  multi;}
+{ yylval.str = strdup(yytext); rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  multi;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 110 "lexical.l"
-{rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return moins;}
+{ yylval.str = strdup(yytext); rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return moins;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
