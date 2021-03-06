@@ -49,25 +49,25 @@ ELSE        {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); re
 "#"         {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return signe_string;}
 "&"         {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return signe_char;}
 {Int}       {
+            Col= Col + strlen(yytext);
             if(yytext[0]=='('){
                 yytext = yytext+1;
                 yytext[yyleng-2] = '\0'; 
                 
             }
             yylval.entier = atoi(yytext);
-            Col= Col + strlen(yytext);
-            rechercher(yytext,"const entier","INTEGER",atoi(yytext),0);
+            rechercher(yytext,"const entier","INTEGER",0,0);
             printf("entite lexical reconnu est %s\n",yytext);
             return typeInt;}
 {Float}     {
+            Col= Col + strlen(yytext);
             if(yytext[0]=='('){
                 yytext = yytext+1;
                 yytext[yyleng-2] = '\0'; 
                 
             }
             yylval.flt = atof(yytext); 
-            Col= Col + strlen(yytext);
-            rechercher(yytext,"const reel","REAL",atof(yytext),0);
+            rechercher(yytext,"const reel","REAL",0,0);
             printf("entite lexical reconnu est %s\n",yytext);
             return typeFloat;
             }
@@ -87,7 +87,6 @@ INF         {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); re
                 
                 if(yyleng >10) printf("Erreur lexicale: IDF trop long  ligne : %d Col :%d \n",nbligne,Col);
                 else{
-                    printf("idf : %s\n",yytext);
                     yylval.str = strdup(yytext);
                     rechercher(yytext,"IDF","nothing",5,0);
                     printf("entite lexical reconnu est %s\n",yytext);
@@ -105,7 +104,7 @@ INF         {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); re
 
 
 "##"        {rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return dz;} 
-"/"         {rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return division ;}
+"/"         { yylval.str = strdup(yytext); rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return division ;}
 "+"         {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return addition ;}
 "*"         {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  multi;}
 "-"         {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return moins;}

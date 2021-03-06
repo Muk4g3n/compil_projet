@@ -819,14 +819,14 @@ case 23:
 YY_RULE_SETUP
 #line 51 "lexical.l"
 {
+            Col= Col + strlen(yytext);
             if(yytext[0]=='('){
                 yytext = yytext+1;
                 yytext[yyleng-2] = '\0'; 
                 
             }
             yylval.entier = atoi(yytext);
-            Col= Col + strlen(yytext);
-            rechercher(yytext,"const entier","INTEGER",atoi(yytext),0);
+            rechercher(yytext,"const entier","INTEGER",0,0);
             printf("entite lexical reconnu est %s\n",yytext);
             return typeInt;}
 	YY_BREAK
@@ -834,14 +834,14 @@ case 24:
 YY_RULE_SETUP
 #line 62 "lexical.l"
 {
+            Col= Col + strlen(yytext);
             if(yytext[0]=='('){
                 yytext = yytext+1;
                 yytext[yyleng-2] = '\0'; 
                 
             }
             yylval.flt = atof(yytext); 
-            Col= Col + strlen(yytext);
-            rechercher(yytext,"const reel","REAL",atof(yytext),0);
+            rechercher(yytext,"const reel","REAL",0,0);
             printf("entite lexical reconnu est %s\n",yytext);
             return typeFloat;
             }
@@ -898,7 +898,6 @@ YY_RULE_SETUP
                 
                 if(yyleng >10) printf("Erreur lexicale: IDF trop long  ligne : %d Col :%d \n",nbligne,Col);
                 else{
-                    printf("idf : %s\n",yytext);
                     yylval.str = strdup(yytext);
                     rechercher(yytext,"IDF","nothing",5,0);
                     printf("entite lexical reconnu est %s\n",yytext);
@@ -909,115 +908,115 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 100 "lexical.l"
+#line 99 "lexical.l"
 { printf("commentaire : %s \n",yytext);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 102 "lexical.l"
+#line 101 "lexical.l"
 { rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return paro;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 103 "lexical.l"
+#line 102 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return parf;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 104 "lexical.l"
+#line 103 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return address;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 107 "lexical.l"
+#line 106 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return dz;} 
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 108 "lexical.l"
-{rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return division ;}
+#line 107 "lexical.l"
+{ yylval.str = strdup(yytext); rechercher(yytext,"sep"," ",0,2);  Col= Col + strlen(yytext); return division ;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 109 "lexical.l"
+#line 108 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return addition ;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 110 "lexical.l"
+#line 109 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  multi;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 111 "lexical.l"
+#line 110 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return moins;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 112 "lexical.l"
+#line 111 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return dpts ;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 113 "lexical.l"
+#line 112 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  egale;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 114 "lexical.l"
+#line 113 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return affectation  ;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 115 "lexical.l"
+#line 114 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return fin;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 116 "lexical.l"
+#line 115 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return acco ;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 117 "lexical.l"
+#line 116 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  accf;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 118 "lexical.l"
+#line 117 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return crov;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 119 "lexical.l"
+#line 118 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return  crof; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 120 "lexical.l"
+#line 119 "lexical.l"
 {rechercher(yytext,"sep"," ",0,2); Col= Col + strlen(yytext); return sep;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 122 "lexical.l"
+#line 121 "lexical.l"
 {Col = Col + strlen(yytext);}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 123 "lexical.l"
+#line 122 "lexical.l"
 {nbligne++; printf("\n%d)   ",nbligne); Col = 1;}  
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 124 "lexical.l"
+#line 123 "lexical.l"
 {printf("erreur lexical : %d:%d \n",nbligne,Col);}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 125 "lexical.l"
+#line 124 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 1021 "lex.yy.c"
+#line 1020 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1903,5 +1902,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 125 "lexical.l"
+#line 124 "lexical.l"
 

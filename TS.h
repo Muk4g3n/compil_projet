@@ -56,13 +56,13 @@ void inserer(char entite[], char code[], char type[], float val, int i, int y)
     case 1:
         tabm[i].state = 1;
         strcpy(tabm[i].name, entite);
-        strcpy(tabm[i].type, type);
+        strcpy(tabm[i].type, code);
         break;
 
     case 2:
         tabs[i].state = 1;
         strcpy(tabs[i].name, entite);
-        strcpy(tabs[i].type, type);
+        strcpy(tabs[i].type, code);
         break;
     }
 }
@@ -80,13 +80,9 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
                  (strcmp(entite, tab[i].name) != 0));
              i++)
             ;
-        if (i < 1000)
+        if (i < 1000 && (tab[i].state == 0))
         {
             inserer(entite, code, type, val, i, 0);
-        }
-        else
-        {
-            printf("entite existe deja\n");
         }
         break;
 
@@ -102,10 +98,6 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
         {
             inserer(entite, code, type, val, i, 1);
         }
-        else
-        {
-            printf("entite existe deja\n");
-        }
         break;
     case 2:
         for (i = 0;
@@ -118,10 +110,6 @@ void rechercher(char entite[], char code[], char type[], float val, int y)
         if (i < 40)
         {
             inserer(entite, code, type, val, i, 2);
-        }
-        else
-        {
-            printf("entite existe deja\n");
         }
         break;
     }
@@ -149,7 +137,7 @@ void afficher()
 
     printf("\n/***************Table des symboles IDF******************/\n");
     printf("____________________________________________________________________\n");
-    printf("\t| Nom_Entite |  Code_Entite | Type_Entite | Val_Entite\n");
+    printf("\t| Nom_Entite |  Code_Entite | Type_Entite | Val_Entite | Taille_entite\n");
     printf("____________________________________________________________________\n");
 
     for (i = 0; i < 1000; i++)
@@ -157,7 +145,8 @@ void afficher()
 
         if (tab[i].state == 1)
         {
-            printf("\t|%10s |%15s | %12s | %12f\n", tab[i].name, tab[i].code, tab[i].type, tab[i].val);
+
+            printf("\t|%10s |%15s | %12s | %12f |%d\n", tab[i].name, tab[i].code, tab[i].type, tab[i].val, tab[i].taille);
         }
     }
 
@@ -206,6 +195,15 @@ int get_position(char entite[])
     return -1;
 }
 
+void inserer_taille(char entite[], int taille)
+{
+    int pos = get_position(entite);
+    if (pos != -1)
+    {
+        tab[pos].taille = taille;
+    }
+}
+
 //retourne 1 si idf est doublement declaré, 0 sinon
 int double_declaration(char entite[])
 {
@@ -234,12 +232,24 @@ void inserer_type(char entite[], char type[])
         strcpy(tab[pos].type, type);
     }
 }
-
-void inserer_taille(char entite[], int taille)
+int get_taille(char entite[])
 {
     int pos = get_position(entite);
-    if (strcmp(entite, tab[pos].name) == 0)
+    if (pos != -1)
+        return tab[pos].taille;
+}
+
+int compare_type(char entite1[], char type[])
+{
+    int pos1 = get_position(entite1);
+    if (tab[pos1].type == type)
     {
-        tab[pos].taille = taille;
+        printf("got inside the if \n");
+        return 1;
+    }
+    else
+    {
+        printf("got inside the else \n");
+        return 0;
     }
 }

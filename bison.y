@@ -9,6 +9,8 @@ extern FILE* yyin ;
 int nbligne=1,Col=1;
 char* sauvtype;
 int sauvtaille;
+int sauvval;
+char *sauvafftype,sauvafftype1;
 %}
 %union{
         int entier;
@@ -25,7 +27,7 @@ int sauvtaille;
 %token quotation_mark
 %token signe_real signe_string signe_char moins
 
-%type <str> IDF typeChar typeString mc_str mc_char mc_reel mc_entier TYPE 
+%type <str> IDF typeChar typeString mc_str mc_char mc_reel mc_entier TYPE division
 %type <entier> typeInt 
 %type <flt> typeFloat 
 
@@ -68,7 +70,7 @@ LIST_IDF: IDF sep LIST_IDF {
                                 else
                                  printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
                            }
-        | IDF_TABLEAU LIST_IDF 
+        | IDF_TABLEAU LIST_IDF
         | IDF fin { 
                        if(double_declaration($1)==0){
                                  inserer_type($1,sauvtype);
@@ -83,20 +85,29 @@ LIST_CST:TYPE dpts LIST_IDF_CST LIST_CST
         |
         ;   
 LIST_IDF_CST: IDF affectation TYPE_IDF sep LIST_IDF_CST { 
-                                if(double_declaration($1)==0){
-                                 inserer_type($1,sauvtype);
-                                 }
-                                else
-                                 printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
-        }
+                                                        if(double_declaration($1)==0){
+                                                        inserer_type($1,sauvtype);
+                                                        printf("outside the sauvafftype condition and sauvafftype is %s \n",sauvafftype);
+                                                        if(compare_type($1,sauvafftype) == 0){
+                                                        printf("inside the sauvafftype condition \n");
+                                                        printf("erreur semantique : type incompatible, Ligne %d : Col %d\n",nbligne,Col);
+                                                        }
+                                                        }
+                                                        else
+                                                        printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
+                                                        }
             | IDF affectation TYPE_IDF fin { 
-                               if(double_declaration($1)==0){
-                                 inserer_type($1,sauvtype);
-                                 printf("inside the if \n");
-                                 }
-                                else
-                                 printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
-        }
+                                                if(double_declaration($1)==0){
+                                                inserer_type($1,sauvtype);
+                                                printf("outside the sauvafftype condition and sauvafftype is %s \n",sauvafftype);
+                                                if(compare_type($1,sauvafftype) == 0){
+                                                        printf("inside the sauvafftype condition \n");
+                                                        printf("erreur semantique : type incompatible, Ligne %d : Col %d\n",nbligne,Col);
+                                                }
+                                                }
+                                                else
+                                                printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
+                                                }
             ;
 
 
@@ -112,20 +123,20 @@ DEC_INST2:DEC_READ
          ;
 
 DEC_READ:mc_read paro typeString  bar address IDF parf fin {
-        if(double_declaration($6)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$6);
-        }
-}
+                                                                if(double_declaration($6)==0){
+                                                                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$6);
+                                                                }
+                                                                }
         ;
 
 DEC_WRITE: mc_write paro typeString DEC_WRITE2 parf fin
          
          ;
 DEC_WRITE2: bar IDF DEC_WRITE2 {
-        if(double_declaration($2)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$2);
-        }
-}
+                                 if(double_declaration($2)==0){
+                                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$2);
+                                }
+                                }
           | 
           ;
 
@@ -134,38 +145,41 @@ DEC_WHILE: mc_while paro DEC_COND parf acco DEC_AFFECTATION accf {
                                                                         }
          ;
 DEC_AFFECTATION: IDF affectation DEC_AFFECTATION2 fin {
-        if(double_declaration($1)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
-        }
-}
-                | IDF_TABLEAU affectation DEC_AFFECTATION2 fin
+                                                         if(double_declaration($1)==0){
+                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                                                                                        }
+                                                        }
+                | IDF_TABLEAU2 affectation DEC_AFFECTATION2 fin
                 ;
 DEC_AFFECTATION2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2
                 | IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2 {
-        if(double_declaration($1)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
-        }
-}
+                                                                if(double_declaration($1)!=0){
+                                                                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                                                                }
+                                                                }
                 | TYPE_IDF
                 | IDF {
-        if(double_declaration($1)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
-        }
-}
+                        if(double_declaration($1)!=1){
+                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                                                        }
+                        }
                 ;
-DEC_COND2: typeInt OPERATEUR_ARITHMETHIQUE DEC_COND2
+DEC_COND2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_COND2
          | IDF OPERATEUR_ARITHMETHIQUE  DEC_COND2 {
-        if(double_declaration($1)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
-        }
+                                                        if(double_declaration($1)!=1){
+                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                                                        }
 }   
-         | typeInt
-         |IDF {
-        if(double_declaration($1)==0){
-                printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
-        }
-}
+         | TYPE_IDF2
+         |IDF2
          ;
+
+IDF2: IDF {
+              if(double_declaration($1)==0){
+                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                }
+}
+;
 DEC_COND:DEC_COND2 OPERATEUR_COMPARAISON DEC_COND2
         |
         ;
@@ -196,27 +210,77 @@ TYPE: mc_entier {
                 }
       ;
 IDF_TABLEAU:IDF crov typeInt crof  {
-        inserer_type($1,sauvtype);
-        if(rechercher_BIB("ARRAY")==0) {printf("erreur semantique : manque de bibliotheque ARRAY, Ligne %d: Col%d \n",nbligne,Col);}
-        else{
-                if($3 <0) {
-                        printf("erreur semantique :taille de tableau non valide %d:%d \n",nbligne,Col);
-                        }
+                                        if(rechercher_BIB("ARRAY")==0) {printf("erreur semantique : manque de bibliotheque ARRAY, Ligne %d: Col%d \n",nbligne,Col);}
+                                        else{   
+                                                  if(double_declaration($1)==0){
+                                                        inserer_type($1,sauvtype);
+                                                
+                                                        if($3 <0) {
+                                                        printf("erreur semantique :taille de tableau non valide %d:%d \n",nbligne,Col);
+                                                
+                                                                }
+                                                        else inserer_taille($1,$3);
+                                                 }
+                                                 else
+                                                  printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
+                                                 
                
-        }
+                                        }
 
 }
 ;
 
-TYPE_IDF: typeInt 
-        |typeFloat 
-        |typeString 
-        |typeChar 
+IDF_TABLEAU2:IDF crov typeInt crof  {
+                                        if(rechercher_BIB("ARRAY")==0) {printf("erreur semantique : manque de bibliotheque ARRAY, Ligne %d: Col%d \n",nbligne,Col);}
+                                        else{   
+                                                        if(double_declaration($1)==0){
+                                                        printf("erreur semantique : variable non-declare ligne %d : col %d : %s\n" ,nbligne,Col,$1);
+                                                        
+                                                        }
+                                                        else {
+                                                                if($3> get_taille($1)) {printf("erreur semantique : depassement de la taille de tableau ligne %d : col %d \n",nbligne,Col);}
+                                                        }
+                                        }
+
+}
+;
+
+TYPE_IDF: typeInt {
+                        sauvafftype = strdup("INTEGER");
+                        
+                        }
+        |typeFloat {
+                        sauvafftype = strdup("REAL");
+                        }               
+        |typeString {
+                        sauvafftype = strdup("STRING");
+                        } 
+        |typeChar {
+                        sauvafftype = strdup("CHAR");
+
+                } 
         ;
  
+TYPE_IDF2: typeInt {
+                        sauvafftype = strdup("INTEGER");
+                        
+                        }
+        |typeFloat {
+                        sauvafftype = strdup("REAL");
+                        }               
+        |typeString {
+                        sauvafftype = strdup("STRING");
+                        } 
+        |typeChar {
+                        sauvafftype = strdup("CHAR");
+
+                } 
+        ;
 
 OPERATEUR_ARITHMETHIQUE:division {
-                                        if(rechercher_BIB("PROCESS")==0) {printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);}
+                                        if(rechercher_BIB("PROCESS")==0) {
+                                                printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);
+                                                }
                                 }
                         |addition {
                                         if(rechercher_BIB("PROCESS")==0) {printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);}
