@@ -229,6 +229,20 @@ void inserer_taille(char entite[], int taille)
     }
 }
 
+inserer_val(char entite[], int val)
+{
+    int pos = get_position(entite);
+    if (pos != -1)
+        tab[pos].val = val;
+}
+
+inserer_charval(char entite[], char val[])
+{
+    int pos = get_position(entite);
+    if (pos != -1)
+        strcpy(tab[pos].charVal, val);
+}
+
 //retourne 1 si idf est doublement declaré, 0 sinon
 int double_declaration(char entite[])
 {
@@ -290,7 +304,7 @@ int compare_type(char entite1[], char type[])
 
 int compare_type1(char type1[], char type2[])
 {
-    if (type1 == type2)
+    if (strcmp(type1, type2) == 0)
     {
         return 1;
     }
@@ -298,33 +312,4 @@ int compare_type1(char type1[], char type2[])
     {
         return 0;
     }
-}
-
-void inserer_tab_operand(char type[])
-{
-    int i = 0;
-    while (i < 10 && operands_tab[i] != NULL)
-    {
-        i++;
-    }
-    if (i < 10)
-    {
-        operands_tab[i] = type;
-        printf("type is %s \n", operands_tab[i]);
-    }
-}
-
-int compare_type_tab()
-{
-    int i = 1;
-    while (i < 10)
-    {
-        if (compare_type1(operands_tab[i - 1], operands_tab[i]) == 0)
-        {
-
-            return 0;
-        }
-        i++;
-    }
-    return 1;
 }
