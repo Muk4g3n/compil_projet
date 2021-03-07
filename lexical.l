@@ -55,10 +55,18 @@ ELSE        {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); re
                 yytext[yyleng-2] = '\0'; 
                 
             }
-            yylval.entier = atoi(yytext);
-            rechercher(yytext,"const entier","INTEGER",yytext,0);
+            if(atoi(yytext)> 32768 && atoi(yytext)< -32768 )
+            {
+                printf("erreur semantique : int val Ligne  %d : Col %d\n",nbligne,Col);
+            }
+            else{
+                yylval.entier = atoi(yytext);
+            rechercher(yytext,"const","INTEGER",yytext,0);
              
-            return typeInt;}
+            return typeInt;
+            }
+
+            }
 {Float}     {
             Col= Col + strlen(yytext);
             if(yytext[0]=='('){
@@ -67,12 +75,12 @@ ELSE        {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); re
                 
             }
             yylval.flt = atof(yytext); 
-            rechercher(yytext,"const reel","REAL",yytext,0);
+            rechercher(yytext,"const","REAL",yytext,0);
              
             return typeFloat;
             }
-{String}    { yylval.str = strdup(yytext); Col= Col + strlen(yytext); rechercher_string(yytext,"const str","STRING",yytext);   return typeString;}
-{Char}      { yylval.str = strdup(yytext); rechercher_string(yytext," const str","CHAR",yytext); Col= Col + strlen(yytext);   return typeChar;}
+{String}    { yylval.str = strdup(yytext); Col= Col + strlen(yytext); rechercher_string(yytext,"const","STRING",yytext);   return typeString;}
+{Char}      { yylval.str = strdup(yytext); rechercher_string(yytext," const","CHAR",yytext); Col= Col + strlen(yytext);   return typeChar;}
 SUP         {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); return mc_sup;}
 SUPE        {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); return mc_supe;}
 EG          {rechercher(yytext,"Mot cle"," ",0,1); Col= Col + strlen(yytext); return mc_eg;}

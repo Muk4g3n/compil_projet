@@ -89,7 +89,11 @@ LIST_IDF_CST: IDF affectation TYPE_IDF sep LIST_IDF_CST {
                                                                 inserer_type($1,sauvtype);
                                                                 if(compare_type1(get_type($1),sauvafftype) == 0){
                                                                 printf("erreur semantique : type incompatible, Ligne %d : Col %d : %s\n",nbligne,Col,$1);
-                                                        }
+                                                                        }
+                                                                        else {
+                                                                                inserer_idf_const($1);
+                                                                        }
+
                                                         }
                                                         else
                                                         printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
@@ -99,7 +103,10 @@ LIST_IDF_CST: IDF affectation TYPE_IDF sep LIST_IDF_CST {
                                                 inserer_type($1,sauvtype);
                                                 if(compare_type1(get_type($1),sauvafftype) == 0){
                                                         printf("erreur semantique : type incompatible, Ligne %d : Col %d\n",nbligne,Col);
-                                                }
+                                                                        }
+                                                                        else {
+                                                                                inserer_idf_const($1);
+                                                                        }
                                                 }
                                                 else
                                                 printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,$1);
@@ -122,6 +129,12 @@ DEC_READ:mc_read paro typeString  bar address IDF parf fin {
                                                                 if(double_declaration($6)==0){
                                                                 printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$6);
                                                                 }
+                                                                else{
+                                                                        if(checkRead($6,$3,nbligne) ==1) printf("fonction read : %s \n",$6);
+                                                                        else{
+                                                                                printf("erreur semantique %d : incomatible type %s - %s dans read \n",nbligne,$3,$6);
+                                                                        }
+                                                                }
                                                                 }
         ;
 
@@ -143,12 +156,15 @@ DEC_WHILE: mc_while paro DEC_COND parf acco DEC_AFFECTATION accf {
 DEC_AFFECTATION: IDF affectation DEC_AFFECTATION2 fin {
                                                         
                                                          if(double_declaration($1)==0){
-                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,$1);
+                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s \n",nbligne,Col,$1);
                                                                                         }
                                                         else{
                                                                 
                                                                 sauvafftype1 = strdup(get_type($1));
-                                                                
+                                                                if(strcmp(get_code($1),"const")==0)
+                                                                {
+                                                                        printf("erreur semantique: affectation a une constante, ligne %d : col %d : %s",nbligne,Col,$1);
+                                                                }
                                                         }
                                                         
                                                         }
@@ -160,11 +176,7 @@ DEC_AFFECTATION2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2 {
                                                                          printf("erreur semantique : type non-compatible, Ligne %d , Col %d \n",nbligne,Col);
                                                                         }
 
-                                                                        if(sauvopr == "/"){
-                                                                                if(sauvval == 0){
-                                                                                        printf("erreur semantique : division par 0, Ligne %d : Col %d \n",nbligne,Col);
-                                                                                }
-                                                                        }
+                                                                       
                                                                    }
                 | IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2 {
                                                                 if(double_declaration($1)!=0){
@@ -182,13 +194,8 @@ DEC_AFFECTATION2: TYPE_IDF OPERATEUR_ARITHMETHIQUE DEC_AFFECTATION2 {
                                           {
                                                  printf("erreur semantique : type non-compatible, Ligne %d , Col %d \n",nbligne,Col);
                                         }               
-
                                         
-                                                                        if(sauvopr == "/"){
-                                                                                if(sauvval == 0){
-                                                                                        printf("erreur semantique : division par 0, Ligne %d : Col %d \n",nbligne,Col);
-                                                                                }
-                                                                        }              
+                                                    
                                  }
                 | IDF2
                 ;
@@ -283,6 +290,8 @@ IDF_TABLEAU2:IDF crov typeInt crof  {
 TYPE_IDF: typeInt {
                         sauvafftype = strdup("INTEGER");
                         sauvval = $1;
+                        
+
                         }
         |typeFloat {
                         sauvafftype = strdup("REAL");
@@ -301,6 +310,7 @@ TYPE_IDF: typeInt {
 TYPE_IDF2: typeInt {
                         sauvafftype = strdup("INTEGER");
                         sauvval = $1;
+
                         }
         |typeFloat {
                         sauvafftype = strdup("REAL");
@@ -322,6 +332,7 @@ OPERATEUR_ARITHMETHIQUE:division {
                                                 }
                                         else {
                                                 sauvopr = strdup($1);
+                                               
                                         }
                                 }
                         |addition {

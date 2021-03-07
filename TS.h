@@ -41,7 +41,7 @@ void initialisation()
         tabm[i].state = 0;
     }
 }
-
+// insertion
 void inserer(char entite[], char code[], char type[], float val, int i, int y)
 {
     switch (y)
@@ -68,7 +68,7 @@ void inserer(char entite[], char code[], char type[], float val, int i, int y)
         break;
     }
 }
-
+// insertion des string et char
 void inserer_char(char entite[], char code[], char type[], char val[], int i)
 {
     tab[i].state = 1;
@@ -77,7 +77,7 @@ void inserer_char(char entite[], char code[], char type[], char val[], int i)
     strcpy(tab[i].type, type);
     tab[i].charVal = strdup(val);
 }
-
+// recherche
 void rechercher(char entite[], char code[], char type[], char val[], int y)
 {
     int i, j;
@@ -126,7 +126,7 @@ void rechercher(char entite[], char code[], char type[], char val[], int y)
         break;
     }
 }
-
+// recherche string
 void rechercher_string(char entite[], char code[], char type[], char val[])
 {
     int i;
@@ -271,6 +271,17 @@ void inserer_type(char entite[], char type[])
         strcpy(tab[pos].type, type);
     }
 }
+
+void inserer_idf_const(char entite[])
+{
+    int pos = get_position(entite);
+
+    if (pos != -1)
+    {
+        strcpy(tab[pos].code, "const");
+    }
+}
+
 int get_taille(char entite[])
 {
     int pos = get_position(entite);
@@ -284,6 +295,15 @@ char *get_type(char entite[])
     if (pos != -1)
     {
         return tab[pos].type;
+    }
+}
+
+char *get_code(char entite[])
+{
+    int pos = get_position(entite);
+    if (pos != -1)
+    {
+        return tab[pos].code;
     }
 }
 
@@ -312,4 +332,22 @@ int compare_type1(char type1[], char type2[])
     {
         return 0;
     }
+}
+
+int checkRead(char entite[], char mode[], int l)
+{
+    int pos;
+    printf("%s %s ", entite, mode);
+    pos = get_position(entite);
+    printf(" ** %s \n", tab[pos].type);
+    if (strcmp(mode, "$") == 0 && strcmp(tab[pos].type, "INTEGER") == 0)
+        return 1;
+    if (strcmp(mode, "%") == 0 && strcmp(tab[pos].type, "REAL") == 0)
+        return 1;
+    if (strcmp(mode, "#") == 0 && strcmp(tab[pos].type, "STRING") == 0)
+        return 1;
+    if (strcmp(mode, "&") == 0 && strcmp(tab[pos].type, "CHAR") == 0)
+        return 1;
+    printf(" ** erreur \n");
+    return 0;
 }

@@ -7,6 +7,7 @@ Programme Namee
 	/* RAMDANI Abderrahmane KESSIR Ouassim groupe 1 */	
 	VAR REAL :: Axe2// Hello //Hey$
 		INTEGER ::AEz3 // Ze[5]$
+		CHAR :: Zd$
 		
 	CONST   
 	REAL :: Res:=2.5// ASs:=(-22.2)$
@@ -20,10 +21,10 @@ Programme Namee
 	Ress :=(-2.2)+Aze*3$
 	Ze[7] :=Zz  + 2.2$
 	AEz3:= 2.2/0$
-	
+	Xf := 6$
 	WRITE("ff")$
 	
-	READ("#" |@Hello)$
+	READ("$" |@Hello)$
 	
 	WRITE("ff"| Hey)$
 	

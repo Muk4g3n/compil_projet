@@ -511,12 +511,12 @@ static const yytype_uint16 yyrline[] =
 {
        0,    36,    36,    39,    40,    43,    46,    47,    48,    51,
       52,    55,    56,    57,    58,    59,    62,    63,    66,    73,
-      74,    81,    84,    85,    87,    97,   111,   112,   114,   115,
-     116,   117,   118,   121,   128,   131,   136,   139,   143,   155,
-     157,   169,   180,   193,   195,   196,   197,   200,   213,   214,
-     217,   220,   221,   225,   229,   233,   237,   242,   263,   283,
-     287,   291,   295,   301,   305,   309,   313,   319,   327,   330,
-     333,   338,   339,   340,   341,   342,   343
+      74,    81,    84,    85,    87,   101,   118,   119,   121,   122,
+     123,   124,   125,   128,   141,   144,   149,   152,   156,   171,
+     173,   181,   192,   200,   202,   203,   204,   207,   220,   221,
+     224,   227,   228,   232,   236,   240,   244,   249,   270,   290,
+     296,   300,   304,   310,   315,   319,   323,   329,   338,   341,
+     344,   349,   350,   351,   352,   353,   354
 };
 #endif
 
@@ -1554,7 +1554,11 @@ yyreduce:
                                                                 inserer_type((yyvsp[(1) - (5)].str),sauvtype);
                                                                 if(compare_type1(get_type((yyvsp[(1) - (5)].str)),sauvafftype) == 0){
                                                                 printf("erreur semantique : type incompatible, Ligne %d : Col %d : %s\n",nbligne,Col,(yyvsp[(1) - (5)].str));
-                                                        }
+                                                                        }
+                                                                        else {
+                                                                                inserer_idf_const((yyvsp[(1) - (5)].str));
+                                                                        }
+
                                                         }
                                                         else
                                                         printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,(yyvsp[(1) - (5)].str));
@@ -1564,13 +1568,16 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 97 "bison.y"
+#line 101 "bison.y"
     { 
                                                 if(double_declaration((yyvsp[(1) - (4)].str))==0){
                                                 inserer_type((yyvsp[(1) - (4)].str),sauvtype);
                                                 if(compare_type1(get_type((yyvsp[(1) - (4)].str)),sauvafftype) == 0){
                                                         printf("erreur semantique : type incompatible, Ligne %d : Col %d\n",nbligne,Col);
-                                                }
+                                                                        }
+                                                                        else {
+                                                                                inserer_idf_const((yyvsp[(1) - (4)].str));
+                                                                        }
                                                 }
                                                 else
                                                 printf("erreur semantique : idf doublement declare ligne %d : col %d : %s \n",nbligne,Col,(yyvsp[(1) - (4)].str));
@@ -1580,10 +1587,16 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 121 "bison.y"
+#line 128 "bison.y"
     {
                                                                 if(double_declaration((yyvsp[(6) - (8)].str))==0){
                                                                 printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,(yyvsp[(6) - (8)].str));
+                                                                }
+                                                                else{
+                                                                        if(checkRead((yyvsp[(6) - (8)].str),(yyvsp[(3) - (8)].str),nbligne) ==1) printf("fonction read : %s \n",(yyvsp[(6) - (8)].str));
+                                                                        else{
+                                                                                printf("erreur semantique %d : incomatible type %s - %s dans read \n",nbligne,(yyvsp[(3) - (8)].str),(yyvsp[(6) - (8)].str));
+                                                                        }
                                                                 }
                                                                 ;}
     break;
@@ -1591,7 +1604,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 131 "bison.y"
+#line 144 "bison.y"
     {
                                  if(double_declaration((yyvsp[(2) - (3)].str))==0){
                                 printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,(yyvsp[(2) - (3)].str));
@@ -1602,7 +1615,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 139 "bison.y"
+#line 152 "bison.y"
     {
                                                                      if(rechercher_BIB("LOOP")==0) {printf("erreur semantique : manque de bibliotheque LOOP, Ligne %d: Col%d \n",nbligne,Col);}   
                                                                         ;}
@@ -1611,16 +1624,19 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 143 "bison.y"
+#line 156 "bison.y"
     {
                                                         
                                                          if(double_declaration((yyvsp[(1) - (4)].str))==0){
-                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,(yyvsp[(1) - (4)].str));
+                                                        printf("erreur semantique: variable non-declare ligne %d : col %d : %s \n",nbligne,Col,(yyvsp[(1) - (4)].str));
                                                                                         }
                                                         else{
                                                                 
                                                                 sauvafftype1 = strdup(get_type((yyvsp[(1) - (4)].str)));
-                                                                
+                                                                if(strcmp(get_code((yyvsp[(1) - (4)].str)),"const")==0)
+                                                                {
+                                                                        printf("erreur semantique: affectation a une constante, ligne %d : col %d : %s",nbligne,Col,(yyvsp[(1) - (4)].str));
+                                                                }
                                                         }
                                                         
                                                         ;}
@@ -1629,25 +1645,21 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 157 "bison.y"
+#line 173 "bison.y"
     {
                                                                         if(sauvafftype1 == sauvafftype)
                                                                         {
                                                                          printf("erreur semantique : type non-compatible, Ligne %d , Col %d \n",nbligne,Col);
                                                                         }
 
-                                                                        if(sauvopr == "/"){
-                                                                                if(sauvval == 0){
-                                                                                        printf("erreur semantique : division par 0, Ligne %d : Col %d \n",nbligne,Col);
-                                                                                }
-                                                                        }
+                                                                       
                                                                    ;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 169 "bison.y"
+#line 181 "bison.y"
     {
                                                                 if(double_declaration((yyvsp[(1) - (3)].str))!=0){
                                                                 printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,(yyvsp[(1) - (3)].str));
@@ -1664,26 +1676,21 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 180 "bison.y"
+#line 192 "bison.y"
     {
                                           if(sauvafftype1 == sauvafftype)
                                           {
                                                  printf("erreur semantique : type non-compatible, Ligne %d , Col %d \n",nbligne,Col);
                                         }               
-
                                         
-                                                                        if(sauvopr == "/"){
-                                                                                if(sauvval == 0){
-                                                                                        printf("erreur semantique : division par 0, Ligne %d : Col %d \n",nbligne,Col);
-                                                                                }
-                                                                        }              
+                                                    
                                  ;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 200 "bison.y"
+#line 207 "bison.y"
     {
               if(double_declaration((yyvsp[(1) - (1)].str))==0){
                         printf("erreur semantique: variable non-declare ligne %d : col %d : %s",nbligne,Col,(yyvsp[(1) - (1)].str));
@@ -1701,7 +1708,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 225 "bison.y"
+#line 232 "bison.y"
     {
                  sauvtype = strdup((yyvsp[(1) - (1)].str));
                 
@@ -1711,7 +1718,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 229 "bison.y"
+#line 236 "bison.y"
     {
                  sauvtype = strdup((yyvsp[(1) - (1)].str));
                 
@@ -1721,7 +1728,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 233 "bison.y"
+#line 240 "bison.y"
     {
                 sauvtype = strdup((yyvsp[(1) - (1)].str));
                  
@@ -1731,7 +1738,7 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 237 "bison.y"
+#line 244 "bison.y"
     {
                  sauvtype = strdup((yyvsp[(1) - (1)].str));
                  
@@ -1741,7 +1748,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 242 "bison.y"
+#line 249 "bison.y"
     {
                                         if(rechercher_BIB("ARRAY")==0) {printf("erreur semantique : manque de bibliotheque ARRAY, Ligne %d: Col%d \n",nbligne,Col);}
                                         else{   
@@ -1766,7 +1773,7 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 263 "bison.y"
+#line 270 "bison.y"
     {
                                         if(rechercher_BIB("ARRAY")==0) {printf("erreur semantique : manque de bibliotheque ARRAY, Ligne %d: Col%d \n",nbligne,Col);}
                                         else{   
@@ -1790,17 +1797,19 @@ yyreduce:
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 283 "bison.y"
+#line 290 "bison.y"
     {
                         sauvafftype = strdup("INTEGER");
                         sauvval = (yyvsp[(1) - (1)].entier);
+                        
+
                         ;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 287 "bison.y"
+#line 296 "bison.y"
     {
                         sauvafftype = strdup("REAL");
                         
@@ -1810,7 +1819,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 291 "bison.y"
+#line 300 "bison.y"
     {   
                         sauvafftype = strdup("STRING");
                        
@@ -1820,7 +1829,7 @@ yyreduce:
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 295 "bison.y"
+#line 304 "bison.y"
     {
                         sauvafftype = strdup("CHAR");
                        
@@ -1830,17 +1839,18 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 301 "bison.y"
+#line 310 "bison.y"
     {
                         sauvafftype = strdup("INTEGER");
                         sauvval = (yyvsp[(1) - (1)].entier);
+
                         ;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 305 "bison.y"
+#line 315 "bison.y"
     {
                         sauvafftype = strdup("REAL");
                        
@@ -1850,7 +1860,7 @@ yyreduce:
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 309 "bison.y"
+#line 319 "bison.y"
     {
                         sauvafftype = strdup("STRING");
                         
@@ -1860,7 +1870,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 313 "bison.y"
+#line 323 "bison.y"
     {
                         sauvafftype = strdup("CHAR");
                        
@@ -1870,13 +1880,14 @@ yyreduce:
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 319 "bison.y"
+#line 329 "bison.y"
     {
                                         if(rechercher_BIB("PROCESS")==0) {
                                                 printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);
                                                 }
                                         else {
                                                 sauvopr = strdup((yyvsp[(1) - (1)].str));
+                                               
                                         }
                                 ;}
     break;
@@ -1884,7 +1895,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 327 "bison.y"
+#line 338 "bison.y"
     {
                                         if(rechercher_BIB("PROCESS")==0) {printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);}
                                 ;}
@@ -1893,7 +1904,7 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 330 "bison.y"
+#line 341 "bison.y"
     {
                                         if(rechercher_BIB("PROCESS")==0) {printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);}
                                 ;}
@@ -1902,7 +1913,7 @@ yyreduce:
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 333 "bison.y"
+#line 344 "bison.y"
     {
                                         if(rechercher_BIB("PROCESS")==0) {printf("erreur semantique : manque de bibliotheque PROCESS, Ligne %d: Col%d \n",nbligne,Col);}
                                 ;}
@@ -1911,7 +1922,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1915 "bison.tab.c"
+#line 1926 "bison.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2123,7 +2134,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 345 "bison.y"
+#line 356 "bison.y"
 
 int yyerror(void){ 
         printf("erreur syntaxique : Ligne %d : %d \n",nbligne,Col);
